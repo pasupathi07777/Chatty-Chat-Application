@@ -21,7 +21,7 @@ export const getMessages = createAsyncThunk(
     "mess/getMessages",
     async (credentials, { rejectWithValue }) => {
       try {
-        const response = await axiosInstance.post(`/messages/${credentials}`);
+        const response = await axiosInstance.get(`/messages/${credentials}`);
         return response.data;
       } catch (err) {
         const error = err.response?.data || { message: "Something went wrong" };
@@ -34,6 +34,8 @@ export const getMessages = createAsyncThunk(
 export const sentMessage = createAsyncThunk(
     "mess/sentMessage",
     async (credentials, { rejectWithValue }) => {
+      console.log(credentials);
+      
       const {id,data}=credentials
       try {
         const response = await axiosInstance.post(`/messages/send/${id}`,data);
@@ -92,6 +94,9 @@ export const chatSlice = createSlice({
       .addCase(getMessages.fulfilled, (state, action) => {
         state.isMessagesLoading = false;
         state.messages=action.payload
+        console.log(action.payload
+        );
+        
 
 
       })

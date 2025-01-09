@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
+import {io} from 'socket.io-client'
+import { useSelector } from "react-redux";
 
 export const signupUser = createAsyncThunk(
   "auth/signup",
@@ -56,16 +58,29 @@ export const verifyAuth = createAsyncThunk(
   }
 );
 
+const connectSocket = (state) => {
+  if (!state.authUser || state.socket) return;
+  const socket = io("http://localhost:5001");
+  socket.connect();
+  state.socket=socket
+};
+
+const disConnectSocket = (state) => {
+  if (state.socket) {
+    state.socket.disconnect();
+    state.socket = null;
+  }
+};
+
+
 const initialState = {
   verifyAuthLoading:false,
   signupLoading: false,
   loginLoading: false,
   logoutLoading: false,
-  authUser: {
-    fullName:"pasupathi",
-    email:"pasupathifeather@gmail.com"
-  },
+  authUser:null ,
   onlineUsers: [],
+  socket:null,
 };
 
 export const signupSlice = createSlice({
@@ -93,6 +108,7 @@ export const signupSlice = createSlice({
         state.loginLoading = false;
         state.authUser=true
         toast.success("Login successful!");
+        connectSocket(state)
 
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -108,6 +124,8 @@ export const signupSlice = createSlice({
         state.logoutLoading = false;
         state.authUser=null
         toast.success("Logout successful!");
+        disConnectSocket(state)
+     
       })
       .addCase(logout.rejected, (state, action) => {
         state.logoutLoading = false;
@@ -123,6 +141,7 @@ export const signupSlice = createSlice({
         state.authUser=action.payload.user
         console.log(action.payload)
         console.log(state.authUser)
+        connectSocket(state)
         
 
       })

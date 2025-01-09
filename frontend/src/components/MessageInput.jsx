@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Image, Send, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { sentMessage } from "../slices/chatSlice";
+import { chatState, sentMessage } from "../slices/chatSlice";
 import { authState } from "../slices/authSlice";
 
 const MessageInput = () => {
@@ -10,7 +10,10 @@ const MessageInput = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
   const { authUser } = useSelector(authState);
+  console.log(authUser);
+  
   const dispatch = useDispatch();
+  const { selectedUser } = useSelector(chatState);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -37,7 +40,7 @@ const MessageInput = () => {
 
     try {
       await dispatch(sentMessage(
-        {id:authUser._id,data:{
+        {id:selectedUser,data:{
         text: text.trim(),
         image: imagePreview,
       }}

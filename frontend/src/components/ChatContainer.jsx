@@ -19,14 +19,15 @@ const dispatch=useDispatch()
   } = useSelector(chatState);
 
   const { authUser } = useSelector(authState);
+
   const messageEndRef = useRef(null);
 
   useEffect(() => {
-    dispatch(getMessages(selectedUser._id))
+    dispatch(getMessages(selectedUser))
     // subscribeToMessages();
 
     // return () => unsubscribeFromMessages();
-  }, [selectedUser._id, getMessages]);
+  }, [selectedUser, getMessages]);
 
   useEffect(() => {
     if (messageEndRef.current && messages) {

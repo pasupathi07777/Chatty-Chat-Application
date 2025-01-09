@@ -50,7 +50,7 @@ const Sidebar = () => {
         {filteredUsers.map((user) => (
           <button
             key={user._id}
-            onClick={() => dispatch(setSelectedUser(user))}
+            onClick={() => dispatch(setSelectedUser(user._id))}
             className={`
               w-full p-3 flex items-center gap-3
               hover:bg-base-300 transition-colors
