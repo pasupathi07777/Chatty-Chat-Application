@@ -16,9 +16,10 @@ import { settingState } from './slices/settingSlice'
 
 const App = () => {
   const dispatch = useDispatch()
-  const {signupLoading,authUser}=useSelector(authState)
+  const {signupLoading,authUser,onlineUsers}=useSelector(authState)
    const {theme}=useSelector(settingState)
 
+console.log(onlineUsers);
 
   if(signupLoading){
      return <div className="w-screen min-h-screen flex justify-center items-center ">

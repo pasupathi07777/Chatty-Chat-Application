@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-import {io} from 'socket.io-client'
-import { useSelector } from "react-redux";
+import { io } from "socket.io-client";
+import { connectSocket, disconnectSocket } from "../socket/socketManager";
 
 export const signupUser = createAsyncThunk(
   "auth/signup",
@@ -19,9 +19,13 @@ export const signupUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "auth/login",
-  async (credentials, { rejectWithValue }) => {
+  async (credentials, { rejectWithValue,dispatch }) => {
     try {
       const response = await axiosInstance.post(`/auth/login`, credentials);
+      if(response.data.user){
+        const userId=response.data.user._id
+        connectSocket(dispatch,userId)
+      }
       return response.data;
     } catch (err) {
       const error = err.response?.data || { message: "Something went wrong" };
@@ -29,7 +33,6 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
-
 
 export const logout = createAsyncThunk(
   "auth/logout",
@@ -44,12 +47,15 @@ export const logout = createAsyncThunk(
   }
 );
 
-
 export const verifyAuth = createAsyncThunk(
   "auth/verifyAuth",
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue,dispatch }) => {
     try {
       const response = await axiosInstance.get(`/auth/check`, _);
+      if(response.data.user){
+        const userId=response.data.user._id
+        connectSocket(dispatch,userId)
+      }
       return response.data;
     } catch (err) {
       const error = err.response?.data || { message: "Something went wrong" };
@@ -58,35 +64,45 @@ export const verifyAuth = createAsyncThunk(
   }
 );
 
-const connectSocket = (state) => {
-  if (!state.authUser || state.socket) return;
-  const socket = io("http://localhost:5001");
-  socket.connect();
-  state.socket=socket
-};
+// const connectSocket = (state) => {
+//   if (!state.authUser || state.socket) return;
+//   const socket = io("http://localhost:5001", {
+//     query: {
+//       userId: state.authUser._id,
+//     },
+//   });
+//   socket.connect();
+//   state.socket = socket;
+//   socket.on("getOnlineUsers", (userIds) => {
+//     state.onlineUsers = userIds;
+//   });
+// };
 
-const disConnectSocket = (state) => {
-  if (state.socket) {
-    state.socket.disconnect();
-    state.socket = null;
-  }
-};
-
+// const disConnectSocket = (state) => {
+//   if (state.socket) {
+//     state.socket.disconnect();
+//     state.socket = null;
+//   }
+// };
 
 const initialState = {
-  verifyAuthLoading:false,
+  verifyAuthLoading: false,
   signupLoading: false,
   loginLoading: false,
   logoutLoading: false,
-  authUser:null ,
+  authUser: null,
   onlineUsers: [],
-  socket:null,
+  socket: null,
 };
 
 export const signupSlice = createSlice({
   name: "signup",
   initialState,
-  reducers: {},
+  reducers: {
+    setOnlineUser:(state,action)=>{
+    state.onlineUsers=action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signupUser.pending, (state) => {
@@ -106,52 +122,45 @@ export const signupSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loginLoading = false;
-        state.authUser=true
+        state.authUser = true;
         toast.success("Login successful!");
-        connectSocket(state)
-
+        connectSocket(state,userId); 
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loginLoading = false;
         toast.error(action.payload?.message || "Signup failed!");
       })
 
-
       .addCase(logout.pending, (state) => {
         state.logoutLoading = true;
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.logoutLoading = false;
-        state.authUser=null
+        state.authUser = null;
         toast.success("Logout successful!");
-        disConnectSocket(state)
-     
+        disConnectSocket(state);
       })
       .addCase(logout.rejected, (state, action) => {
         state.logoutLoading = false;
         toast.error(action.payload?.message || "Logout failed!");
       })
 
-
       .addCase(verifyAuth.pending, (state) => {
         state.verifyAuthLoading = true;
       })
       .addCase(verifyAuth.fulfilled, (state, action) => {
         state.verifyAuthLoading = false;
-        state.authUser=action.payload.user
-        console.log(action.payload)
-        console.log(state.authUser)
-        connectSocket(state)
-        
-
+        state.authUser = action.payload.user;
+        console.log(action.payload);
+        console.log(state.authUser);
+        const userId=action.payload.user._id
+        // connectSocket(dispatch,userId); 
       })
       .addCase(verifyAuth.rejected, (state, action) => {
         state.verifyAuthLoading = false;
-
       });
-
-
   },
 });
-export const authState=state=>state.authReducer
+export const authState = (state) => state.authReducer;
+export const {setOnlineUser}=signupSlice.actions
 export default signupSlice.reducer;
