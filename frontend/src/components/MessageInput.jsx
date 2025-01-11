@@ -10,7 +10,7 @@ const MessageInput = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
   const { authUser } = useSelector(authState);
-  console.log(authUser);
+
   
   const dispatch = useDispatch();
   const { selectedUser } = useSelector(chatState);

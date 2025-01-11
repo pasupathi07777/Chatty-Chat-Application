@@ -64,26 +64,7 @@ export const verifyAuth = createAsyncThunk(
   }
 );
 
-// const connectSocket = (state) => {
-//   if (!state.authUser || state.socket) return;
-//   const socket = io("http://localhost:5001", {
-//     query: {
-//       userId: state.authUser._id,
-//     },
-//   });
-//   socket.connect();
-//   state.socket = socket;
-//   socket.on("getOnlineUsers", (userIds) => {
-//     state.onlineUsers = userIds;
-//   });
-// };
 
-// const disConnectSocket = (state) => {
-//   if (state.socket) {
-//     state.socket.disconnect();
-//     state.socket = null;
-//   }
-// };
 
 const initialState = {
   verifyAuthLoading: false,
@@ -101,7 +82,10 @@ export const signupSlice = createSlice({
   reducers: {
     setOnlineUser:(state,action)=>{
     state.onlineUsers=action.payload
-    }
+    },
+    setAuthUser: (state, action) => {
+      state.authUser = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -138,7 +122,7 @@ export const signupSlice = createSlice({
         state.logoutLoading = false;
         state.authUser = null;
         toast.success("Logout successful!");
-        disConnectSocket(state);
+        disconnectSocket(state);
       })
       .addCase(logout.rejected, (state, action) => {
         state.logoutLoading = false;
@@ -151,10 +135,8 @@ export const signupSlice = createSlice({
       .addCase(verifyAuth.fulfilled, (state, action) => {
         state.verifyAuthLoading = false;
         state.authUser = action.payload.user;
-        console.log(action.payload);
-        console.log(state.authUser);
-        const userId=action.payload.user._id
-        // connectSocket(dispatch,userId); 
+
+
       })
       .addCase(verifyAuth.rejected, (state, action) => {
         state.verifyAuthLoading = false;
@@ -162,5 +144,5 @@ export const signupSlice = createSlice({
   },
 });
 export const authState = (state) => state.authReducer;
-export const {setOnlineUser}=signupSlice.actions
+export const {setOnlineUser,setAuthUser}=signupSlice.actions
 export default signupSlice.reducer;

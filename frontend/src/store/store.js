@@ -9,6 +9,6 @@ export const store = configureStore({
     authReducer: authSlice,
     profileReducer: profileSlice,
     settingReducer:settingSlice,
-    settingReducer:chatSlice
+    chatReducer:chatSlice
   },
 });

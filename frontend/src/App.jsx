@@ -13,13 +13,13 @@ import { Toaster } from "react-hot-toast";
 import { authState, verifyAuth } from './slices/authSlice'
 import Navbar from './components/Navbar'
 import { settingState } from './slices/settingSlice'
+import { subScribeToMessages } from './slices/chatSlice'
 
 const App = () => {
   const dispatch = useDispatch()
   const {signupLoading,authUser,onlineUsers}=useSelector(authState)
    const {theme}=useSelector(settingState)
 
-console.log(onlineUsers);
 
   if(signupLoading){
      return <div className="w-screen min-h-screen flex justify-center items-center ">
@@ -29,6 +29,7 @@ console.log(onlineUsers);
 
   useEffect(()=>{
     dispatch(verifyAuth())
+
 
   },[])
 
