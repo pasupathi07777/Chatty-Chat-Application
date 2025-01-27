@@ -13,7 +13,7 @@ import { Toaster } from "react-hot-toast";
 import { authState, verifyAuth } from './slices/authSlice'
 import Navbar from './components/Navbar'
 import { settingState } from './slices/settingSlice'
-import { subScribeToMessages } from './slices/chatSlice'
+import { getUsers, subScribeToMessages } from './slices/chatSlice'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -33,6 +33,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(verifyAuth());
+    dispatch(getUsers());
 
   }, [dispatch]);
 

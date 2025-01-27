@@ -7,12 +7,11 @@ import { authState } from "../slices/authSlice";
 import SidebarSkeleton from "./SidebarSkeleton";
 
 const Sidebar = () => {
-    const {  users, selectedUser, isUsersLoading } = useSelector(chatState);
-    const { onlineUsers} = useSelector(authState);
-    const dispatch=useDispatch()
-
-
+  const { users, selectedUser, isUsersLoading } = useSelector(chatState);
+  const { onlineUsers } = useSelector(authState);
+  const dispatch = useDispatch()
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+
 
   useEffect(() => {
     dispatch(getUsers())

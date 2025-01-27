@@ -2,8 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosInstance } from "../lib/axios";
 import { getSocket } from "../socket/socketManager";
 
-
-
 export const getUsers = createAsyncThunk(
   "mess/getUsers",
   async (_, { rejectWithValue }) => {
@@ -44,31 +42,28 @@ export const sentMessage = createAsyncThunk(
   }
 );
 
-
 export const subScribeToMessages = () => (dispatch, getState) => {
   const state = getState();
   const { selectedUser } = state.chatReducer;
   if (!selectedUser) return;
-console.log(selectedUser);
+  console.log(selectedUser);
 
   const socket = getSocket();
-
+  if(!socket) return;
 
   socket.on("newMessage", (newMessage) => {
-    if(newMessage.senderId!==selectedUser) return
-    console.log(newMessage)
-    dispatch(addMessage(newMessage)); 
+    if(!newMessage) return;
+    if (newMessage.senderId !== selectedUser) return;
+    console.log(newMessage);
+    dispatch(addMessage(newMessage));
   });
 };
 
 export const unSubScribeToMessages = () => (dispatch, getState) => {
   const socket = getSocket();
-
-
+  if(!socket) return; 
   socket.off("newMessage");
 };
-
-
 
 // Initial state
 const initialState = {
@@ -84,12 +79,15 @@ export const chatSlice = createSlice({
   initialState,
   reducers: {
     setSelectedUser: (state, action) => {
-      state.selectedUser = action.payload;
+      state.selectedUser = action.payload;  // this is the user id  
+      // state.selectedUser = state.users.find(
+      //   (user) => user._id === action.payload
+      // );
     },
     addMessage: (state, action) => {
       console.log(action.payload);
-      
-      state.messages = [...state.messages, action.payload];  
+
+      state.messages = [...state.messages, action.payload];
     },
   },
   extraReducers: (builder) => {

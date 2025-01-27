@@ -109,6 +109,8 @@ const ChatContainer = () => {
   const dispatch = useDispatch();
   const { messages, isMessagesLoading, selectedUser } = useSelector(chatState);
   const { authUser } = useSelector(authState);
+  console.log(authUser,selectedUser);
+  
   const messageEndRef = useRef(null);
 
   // Fetch messages and subscribe to socket when a user is selected
@@ -152,8 +154,8 @@ const ChatContainer = () => {
                 <img
                   src={
                     message.senderId === authUser._id
-                      ? authUser.profilePic || "/avatar.png"
-                      : selectedUser.profilePic || "/avatar.png"
+                      ?  selectedUser.profilePic || "/avatar.png"
+                      : authUser.profilePic || "/avatar.png"
                   }
                   alt="profile pic"
                 />
