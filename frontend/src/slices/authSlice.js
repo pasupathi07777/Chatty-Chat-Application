@@ -106,9 +106,9 @@ export const signupSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loginLoading = false;
-        state.authUser = true;
+        state.authUser = action.payload;
         toast.success("Login successful!");
-        connectSocket(state,userId); 
+        // connectSocket(state,userId); 
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loginLoading = false;
@@ -140,6 +140,7 @@ export const signupSlice = createSlice({
       })
       .addCase(verifyAuth.rejected, (state, action) => {
         state.verifyAuthLoading = false;
+         state.authUser = action.payload.user;
       });
   },
 });
