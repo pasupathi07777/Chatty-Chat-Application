@@ -6,30 +6,27 @@ dotenv.config();
 import { connectDB } from "./lib/db.js";
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
-import { app,server } from "./lib/socket.js";
-import path from 'path'
-
-const PORT=process.env.PORT
-const __dirname=path.resolve()
+import { app, server } from "./lib/socket.js";
+import path from "path";
 
 
 
-app.use(express.json())
+const PORT = process.env.PORT;
+const __dirname = path.resolve();
+
+app.use(express.json());
 
 app.use(cookieParser());
 app.use(
-    cors({
-      // origin: "http://localhost:5173",
-      origin: ["http://localhost:5173", "http://localhost:5174"],
-      credentials: true,
-    })
-  );
-
+  cors({
+    // origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://localhost:5174"],
+    credentials: true,
+  })
+);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
-
-
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
@@ -39,7 +36,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-server.listen(PORT,()=>{
-    console.log(`${PORT} Started`)
-    connectDB()
-})
+server.listen(PORT, () => {
+  console.log(`${PORT} Started`);
+  connectDB();
+});
