@@ -6,9 +6,12 @@ let socket = null;
 // Connect to the socket server
 export const connectSocket = (dispatch, userId) => {
   if (!socket) {
-    socket = io("http://localhost:5001", {
+    socket = io("/", {
       query: { userId },
     });
+    // socket = io("http://localhost:5001", {
+    //   query: { userId },
+    // });
 
     socket.on("getOnlineUsers", (userIds) => {
       dispatch(setOnlineUser(userIds)); // Update the online users
