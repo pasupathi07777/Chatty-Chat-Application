@@ -25,6 +25,8 @@ export const loginUser = createAsyncThunk(
       if(response.data.user){
         const userId=response.data.user._id
         connectSocket(dispatch,userId)
+        console.log(userId,"logining status ");
+        
       }
       return response.data;
     } catch (err) {

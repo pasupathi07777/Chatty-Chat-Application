@@ -53,7 +53,7 @@ export const subScribeToMessages = () => (dispatch, getState) => {
 
   socket.on("newMessage", (newMessage) => {
     if(!newMessage) return;
-    if (newMessage.senderId !== selectedUser) return;
+    if (newMessage.senderId !== selectedUser._id) return;
     console.log(newMessage);
     dispatch(addMessage(newMessage));
   });

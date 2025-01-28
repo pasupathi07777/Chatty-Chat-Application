@@ -23,13 +23,7 @@ const App = () => {
    const navigation=useNavigate()
 
 
-  // if (verifyAuthLoading) {
-  //   return (
-  //     <div className="w-screen min-h-screen flex justify-center items-center ">
-  //       <Loader className="animate-spin size-10 m-auto" />
-  //     </div>
-  //   );
-  // }
+
 
   useEffect(() => {
     dispatch(verifyAuth());
@@ -39,27 +33,7 @@ const App = () => {
 
 
   return (
-    // <div
-    //   data-theme={theme}
-    //   className="flex justify-center flex-col items-center min-h-screen "
-    // >
-    //   <Navbar />
-    //   <Routes>
-    //     <Route path="/" element={<Home />} />
-    //     <Route path="/login" element={<LoginPage />} />
-    //     <Route
-    //       path="/signup"
-    //       element={<SignUpPage navigation={navigation} />}
-    //     />
 
-    //     <Route path="/settings" element={<SettingPage />} />
-    //     <Route
-    //       path="/profile"
-    //       element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
-    //     />
-    //   </Routes>
-    //   <Toaster />
-    // </div>
     <div
       data-theme={theme}
       className="flex justify-center flex-col items-center min-h-screen "

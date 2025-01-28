@@ -40,7 +40,7 @@ const MessageInput = () => {
 
     try {
       await dispatch(sentMessage(
-        {id:selectedUser,data:{
+        {id:selectedUser._id,data:{
         text: text.trim(),
         image: imagePreview,
       }}

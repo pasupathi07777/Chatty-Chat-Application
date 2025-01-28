@@ -115,7 +115,7 @@ const ChatContainer = () => {
 
   // Fetch messages and subscribe to socket when a user is selected
   useEffect(() => {
-    dispatch(getMessages(selectedUser));
+    dispatch(getMessages(selectedUser._id));
     dispatch(subScribeToMessages());
 
     // Cleanup: Unsubscribe from socket when component unmounts
