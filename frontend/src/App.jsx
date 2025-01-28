@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
-// import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import SignUpPage from './pages/SignUpPage'
 import LoginPage from './pages/LoginPage'
 import SettingPage from './pages/SettingPage'
 import ProfilePage from './pages/ProfilePage'
 import { useDispatch, useSelector } from 'react-redux'
-// import { SignupState, signupUser } from './slices/signUpSlice'
 import { Loader } from 'lucide-react';
 import { Toaster } from "react-hot-toast";
 import { authState, verifyAuth } from './slices/authSlice'
