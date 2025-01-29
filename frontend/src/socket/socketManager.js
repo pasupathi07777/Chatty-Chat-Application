@@ -6,9 +6,9 @@ let socket = null;
 // Connect to the socket server
 export const connectSocket = (dispatch, userId) => {
   if (!socket) {
-    socket = io(import.meta.env.MODE  === "development" ? "http://localhost:5001/api" : "/api", {
-      query: { userId },
-    });
+    // socket = io(import.meta.env.MODE  === "development" ? "http://localhost:5001/api" : "/api", {
+    //   query: { userId },
+    // });
     // socket = io("http://localhost:5001", {
     //   query: { userId },
     // });
