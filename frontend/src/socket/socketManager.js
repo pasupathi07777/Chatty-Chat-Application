@@ -11,7 +11,7 @@ export const connectSocket = (dispatch, userId) => {
     //   query: { userId },
     // }); 
      
-    socket = io("/api", {
+    socket = io("/", {
       query: { userId },
     });
     socket.on("getOnlineUsers", (userIds) => {
