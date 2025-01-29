@@ -9,9 +9,9 @@ export const connectSocket = (dispatch, userId) => {
     // socket = io(import.meta.env.MODE  === "development" ? "http://localhost:5001/api" : "/api", {
     //   query: { userId },
     // });
-    // socket = io("http://localhost:5001", {
-    //   query: { userId },
-    // });
+    socket = io("http://localhost:5001", {
+      query: { userId },
+    });
 
     socket.on("getOnlineUsers", (userIds) => {
       dispatch(setOnlineUser(userIds)); // Update the online users
